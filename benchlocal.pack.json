@@ -4,7 +4,7 @@
   "id": "toolcall-15",
   "name": "ToolCall-15",
   "author": "stevibe",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tool-use benchmark with 15 fixed scenarios and tool-call loop scoring.",
   "entry": "./dist/benchlocal/index.js",
   "samplingDefaults": {

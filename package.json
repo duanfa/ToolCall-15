@@ -1,6 +1,6 @@
 {
   "name": "toolcall-15",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Official BenchLocal Bench Pack for tool use and tool-call loop scoring.",
   "license": "MIT",
   "scripts": {

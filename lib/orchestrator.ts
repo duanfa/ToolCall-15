@@ -98,10 +98,15 @@ function stringifyToolResult(result: unknown): string {
   return JSON.stringify(result);
 }
 
-function toAssistantMessage(response: { content: string; toolCalls: ProviderToolCall[] }): ModelMessage {
+function toAssistantMessage(response: {
+  content: string;
+  toolCalls: ProviderToolCall[];
+  reasoningContent?: string;
+}): ModelMessage {
   return {
     role: "assistant",
     content: response.content,
+    ...(response.reasoningContent !== undefined ? { reasoning_content: response.reasoningContent } : {}),
     tool_calls: response.toolCalls
   };
 }

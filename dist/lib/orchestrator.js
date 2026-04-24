@@ -50,6 +50,7 @@ function toAssistantMessage(response) {
     return {
         role: "assistant",
         content: response.content,
+        ...(response.reasoningContent !== undefined ? { reasoning_content: response.reasoningContent } : {}),
         tool_calls: response.toolCalls
     };
 }

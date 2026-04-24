@@ -4,6 +4,7 @@ import type { ModelConfig } from "@/lib/models";
 export type ModelMessage = {
   role: "system" | "user" | "assistant" | "tool";
   content: string;
+  reasoning_content?: string;
   tool_calls?: ProviderToolCall[];
   tool_call_id?: string;
 };
@@ -21,6 +22,7 @@ export type AssistantResponse = {
   content: string;
   toolCalls: ProviderToolCall[];
   reasoning?: string;
+  reasoningContent?: string;
 };
 
 export type GenerationParams = {
@@ -568,7 +570,8 @@ export async function callModel(model: ModelConfig, messages: ModelMessage[], pa
   return {
     content: normalizeContent(message.content),
     toolCalls: normalizeToolCalls(message),
-    reasoning: message.reasoning_content ?? message.reasoning
+    reasoning: message.reasoning_content ?? message.reasoning,
+    reasoningContent: message.reasoning_content
   };
 }
 

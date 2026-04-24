@@ -473,7 +473,8 @@ async function callModel(model, messages, params) {
     return {
         content: normalizeContent(message.content),
         toolCalls: normalizeToolCalls(message),
-        reasoning: message.reasoning_content ?? message.reasoning
+        reasoning: message.reasoning_content ?? message.reasoning,
+        reasoningContent: message.reasoning_content
     };
 }
 function createInitialMessages(userMessage) {
