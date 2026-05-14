@@ -1,4 +1,4 @@
-export type ProviderName = "openrouter" | "ollama" | "llamacpp" | "mlx" | "lmstudio";
+export type ProviderName = "openrouter" | "ollama" | "llamacpp" | "mlx" | "lmstudio" | "dashscope";
 
 export type ModelConfig = {
   id: string;
@@ -21,7 +21,7 @@ export type PublicModelConfigGroups = {
   all: PublicModelConfig[];
 };
 
-const PROVIDERS = new Set<ProviderName>(["openrouter", "ollama", "llamacpp", "mlx", "lmstudio"]);
+const PROVIDERS = new Set<ProviderName>(["openrouter", "ollama", "llamacpp", "mlx", "lmstudio", "dashscope"]);
 
 function normalizeHostBaseUrl(host: string, envName: string): string {
   const trimmed = host.trim().replace(/\/+$/, "");
@@ -68,6 +68,8 @@ function providerLabel(provider: ProviderName): string {
       return "mlx_lm";
     case "lmstudio":
       return "LM Studio";
+    case "dashscope":
+      return "Alibaba DashScope";
   }
 }
 
@@ -111,21 +113,41 @@ function buildProviderBaseUrl(provider: ProviderName, envName: string): string {
 
       return normalizeHostBaseUrl(host, "LMSTUDIO_HOST");
     }
+    case "dashscope": {
+      const host = process.env.DASHSCOPE_BASE_URL?.trim();
+
+      if (!host) {
+        throw new Error(`DASHSCOPE_BASE_URL is required when ${envName} includes a dashscope model.`);
+      }
+
+      return normalizeHostBaseUrl(host, "DASHSCOPE_BASE_URL");
+    }
   }
 }
 
 function buildProviderApiKey(provider: ProviderName, envName: string): string | undefined {
-  if (provider !== "openrouter") {
-    return undefined;
+  switch (provider) {
+    case "openrouter": {
+      const apiKey = process.env.OPENROUTER_API_KEY?.trim();
+
+      if (!apiKey) {
+        throw new Error(`OPENROUTER_API_KEY is required when ${envName} includes an openrouter model.`);
+      }
+
+      return apiKey;
+    }
+    case "dashscope": {
+      const apiKey = process.env.DASHSCOPE_API_KEY?.trim();
+
+      if (!apiKey) {
+        throw new Error(`DASHSCOPE_API_KEY is required when ${envName} includes a dashscope model.`);
+      }
+
+      return apiKey;
+    }
+    default:
+      return undefined;
   }
-
-  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
-
-  if (!apiKey) {
-    throw new Error(`OPENROUTER_API_KEY is required when ${envName} includes an openrouter model.`);
-  }
-
-  return apiKey;
 }
 
 function parseProvider(rawProvider: string, index: number, envName: string): ProviderName {
@@ -133,7 +155,7 @@ function parseProvider(rawProvider: string, index: number, envName: string): Pro
 
   if (!PROVIDERS.has(normalized as ProviderName)) {
     throw new Error(
-      `${envName} entry ${index + 1} has unsupported provider "${rawProvider}". Use openrouter, ollama, llamacpp, mlx, or lmstudio.`
+      `${envName} entry ${index + 1} has unsupported provider "${rawProvider}". Use openrouter, ollama, llamacpp, mlx, lmstudio, or dashscope.`
     );
   }
 

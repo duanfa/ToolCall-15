@@ -10,7 +10,7 @@ import { runScenarioForModel } from "../lib/orchestrator";
 type ModelConfig = {
   id: string;
   label: string;
-  provider: "openrouter" | "ollama" | "llamacpp" | "mlx" | "lmstudio";
+  provider: "openrouter" | "ollama" | "llamacpp" | "mlx" | "lmstudio" | "dashscope";
   model: string;
   baseUrl: string;
   apiKey?: string;
