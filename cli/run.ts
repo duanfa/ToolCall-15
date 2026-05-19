@@ -212,7 +212,7 @@ function buildGenerationParams(options: CliOptions): GenerationParams | undefine
 
 function logProgress(event: RunEvent): void {
   if (event.type === "model_progress") {
-    process.stdout.write(`  ${event.modelId} ${event.scenarioId}: ${event.message}\n`);
+    process.stderr.write(`  ${event.modelId} ${event.scenarioId}: ${event.message}\n`);
   }
 }
 
@@ -262,7 +262,7 @@ async function main(): Promise<void> {
   const modelResults = new Map<string, ModelScenarioResult[]>(models.map((model) => [model.id, []]));
 
   for (const [scenarioIndex, scenario] of scenarios.entries()) {
-    process.stdout.write(`\n[${scenarioIndex + 1}/${scenarios.length}] ${scenario.id} ${scenario.title}\n`);
+    process.stderr.write(`\n[${scenarioIndex + 1}/${scenarios.length}] ${scenario.id} ${scenario.title}\n`);
     const scenarioSummary: ScenarioRunSummary = {
       scenarioId: scenario.id,
       title: scenario.title,
